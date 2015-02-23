@@ -32,6 +32,14 @@ RUN ln -s /home/go_appengine/goroot/bin/goapp /home/go_appengine/go
 RUN sed -i "s/'localhost'/'0.0.0.0'/g" go_appengine/google/appengine/tools/devappserver2/devappserver2.py
 RUN sed -i "s/'--api_port', type=PortParser(), default=0,/'--api_port', type=PortParser(), default=9000,/g" go_appengine/google/appengine/tools/devappserver2/devappserver2.py
 
-EXPOSE 8080
-EXPOSE 8000
-EXPOSE 9000
+EXPOSE 8080 8000 9000
+
+# The GoAppengine project must not be under GOPATH : https://cloud.google.com/appengine/docs/go/#Go_Organizing_Go_apps
+# So we move all root files of the project out of the GOPATH
+RUN mkdir ~/project
+
+# this will later on start all the modules that a child image will define in MODULES environment variable
+ADD ./serveModules.sh ./goGetModules.sh /home/
+
+# Run the project
+CMD /home/serveModules.sh
