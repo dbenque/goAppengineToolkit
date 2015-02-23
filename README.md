@@ -47,22 +47,29 @@ If the the 2 modules can be "go get" then it will be really easy to generate the
 
  2. In your application environment, create a Dockerfile that declares the 2 modules and represents your application:
 >  #Do no use cache in order to get fresh github sources
+>
 >  #docker build --no-cache -t "mylocalserver" .
 >  
 >  FROM dbenque/goappengine
+>
 >  MAINTAINER dbenque
 >
+>
 >  #Setting the MODULES for "go get", modules must be separeted by space
+>
 >  ENV MODULES="github.com/mycount/module1 github.com/mycount/module2"
 >
 >  #Fetch the modules
+>
 >  RUN /home/goGetModules.sh
+>
 >
 >  #Note: the final command is already defined in base image.
 
  3. Build your application image. Note the --no-cache that will force to fetch the latest available code for the modules.
+
  `docker build --no-cache -t "mylocalserver" .`
 
-
  4. Run the application image:
+
   ` docker run -p 127.0.0.1:8080:8080 -p 127.0.0.1:8000:8000 -p 127.0.0.1:9000:9000 mylocalserver`
