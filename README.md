@@ -17,6 +17,7 @@ To be use this you object must implement the following interface:
       GetKey() string
       GetKind() string
     }
+
 Then the available methods are:
 
     func Delete(context *appengine.Context, entity DatastoreEntity) error
@@ -38,6 +39,8 @@ The image proposed here is not complete, it is a base image. Another image shoul
           app.yaml
           src2-1.go
           src2-2.go
+       - app-Dir
+          dispatch.yaml
 
 If the the 2 modules can be "go get" then it will be really easy to generate the docker image that will allow the local testing:
 
@@ -45,7 +48,7 @@ If the the 2 modules can be "go get" then it will be really easy to generate the
 
   `docker build -t "dbenque/goappengine" .`
 
- 2. In your application environment, create a Dockerfile that declares the 2 modules and represents your application:
+ 2. In your application environment, create a Dockerfile that declares the 2 modules and represents your application. If you have a DIspatch.yaml (or other yaml files) place it in a dedicated directory, and reference it as if it was a module:
 >  \#Do no use cache in order to get fresh github sources
 >
 >  \#docker build --no-cache -t "mylocalserver" .
@@ -57,7 +60,7 @@ If the the 2 modules can be "go get" then it will be really easy to generate the
 >
 >  \#Setting the MODULES for "go get", modules must be separeted by space
 >
->  ENV MODULES="github.com/mycount/module1 github.com/mycount/module2"
+>  ENV MODULES="github.com/mycount/project/module1 github.com/mycount/project/module2 github.com/mycount/project/app"
 >
 >  \#Fetch the modules
 >
@@ -72,4 +75,6 @@ If the the 2 modules can be "go get" then it will be really easy to generate the
 
  4. Run the application image:
 
-  ` docker run -p 127.0.0.1:8080:8080 -p 127.0.0.1:8000:8000 -p 127.0.0.1:9000:9000 mylocalserver`
+  ` docker run --rm -p 127.0.0.1:8080:8080 -p 127.0.0.1:8000:8000 -p 127.0.0.1:9000:9000 mylocalserver`
+
+  If you are not using a Dispatch.yaml file and have several module you may have to export more ports in that command (8081, 8082 ... )
