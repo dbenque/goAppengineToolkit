@@ -15,10 +15,11 @@ do
   ## because the module cannot be in gopath: https://cloud.google.com/appengine/docs/go/#Go_Organizing_Go_apps
   find $GOPATH/src/$m -maxdepth 1 -type f -name "[^.]*" -exec mv {} ~/project/$mname \;
 
-  ## prepare the command to launch all modules
-  cmd="$cmd ./project/$mname/app.yaml"
-
 done
+
+## prepare the command to launch all modules
+cmd="$cmd ./project/*/*.yaml"
+
 
 echo "Launching server:"
 echo $cmd

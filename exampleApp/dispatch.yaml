@@ -1,0 +1,15 @@
+application: example-app
+# No version required; this does routing independent of version.
+
+dispatch:
+  # Default module serves the typical web resources and all static resources.
+  #- url: "*/favicon.ico"
+  #  module: default
+
+  # Send all mobile traffic to the mobile frontend.
+  - url: "*/hello/*"
+    module: module-hello
+
+  # Send all work to the one static backend.
+  - url: "*/data/*"
+    module: module-data
