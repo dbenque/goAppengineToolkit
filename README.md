@@ -77,4 +77,4 @@ If the the 2 modules can be "go get" then it will be really easy to generate the
 
   ` docker run --rm -p 127.0.0.1:8080:8080 -p 127.0.0.1:8000:8000 -p 127.0.0.1:9000:9000 mylocalserver`
 
-  If you are not using a Dispatch.yaml file and have several module you may have to export more ports in that command (8081, 8082 ... )
+  If you are not using a Dispatch.yaml file and have several modules you may have to export more ports in that command (8081, 8082 ... )

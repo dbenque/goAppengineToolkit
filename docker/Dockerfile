@@ -42,4 +42,8 @@ RUN mkdir ~/project
 ADD ./serveModules.sh ./goGetModules.sh /home/
 
 # Run the project
-CMD /home/serveModules.sh
+#
+# The modules must be given in the MODULES env variable, example:
+# MODULES="github.com/dbenque/goAppengineToolkit/moduleData github.com/dbenque/goAppengineToolkit/moduleDefault github.com/dbenque/goAppengineToolkit/moduleHello github.com/dbenque/goAppengineToolkit/exampleApp"
+#
+CMD /home/goGetModules.sh && /home/serveModules.sh
