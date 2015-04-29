@@ -16,7 +16,7 @@ RUN apt-get -y install python-dev
 ENV HOME /home
 WORKDIR /home
 
-RUN curl -G https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-1.9.18.zip > go_appengine_sdk_linux_amd64.zip
+RUN curl -G https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-1.9.19.zip > go_appengine_sdk_linux_amd64.zip
 
 RUN apt-get install -y unzip
 RUN unzip go_appengine_sdk_linux_amd64.zip

@@ -54,7 +54,7 @@ func Store(context appengine.Context, entity DatastoreEntity) error {
 	key := datastore.NewKey(context, (entity).GetKind(), (entity).GetKey(), 0, nil)
 
 	if _, err := datastore.Put(context, key, entity); err != nil {
-		context.Infof("Error while storing entity %v", entity)
+		context.Infof("Error while storing [key]=entity : [%v]=%v", key, entity)
 		return err
 	}
 
