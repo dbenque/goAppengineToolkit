@@ -1,4 +1,4 @@
-
+M
 goAppengineToolkit
 ==================
 
@@ -44,7 +44,7 @@ Everything is made to ease the work for module that can be downloaded by "go get
 
  1. Build the base **dbenque/goappengine** image. To do so, **go in folder goAppengineToolkit/docker** and type:
 
-  `docker build -t "dbenque/goappengine" .`
+  `docker build --no-cache=true --rm=true -t "dbenque/goappengine" .`
 
  2. Run the application image, specifying the modules you would like to use:
 
@@ -64,47 +64,18 @@ Everything is made to ease the work for module that can be downloaded by "go get
 
   Thanks to this simple rule, we avoid conflict inside Go SDK.
 
-  ### Local Development
+  ### Local Development  
 
-  #### Modification of module
+  If the module is under development it is possible to mount its local dev folder and gopath in the image instead of asking the container to *go get* it.
+``
+docker run --rm
+-p 127.0.0.1:8080:8080 -p 127.0.0.1:8000:8000 -p 127.0.0.1:9000:9000
+-v "$GOPATH/src/github.com/dbenque/goAppengineToolkit/moduleData:/home/project/moduleData"
+-v "$GOPATH:/localgopath:ro" -e "LOCALGOPATH=`/bin/ls $GOPATH/src`"
+ dbenque/goappengine
+``
 
-  If the module is under development it is possible to mount its local dev folder in the image instead of asking the container to *go get* it. For that don't put your module in the MODULES variable and directly mount the folder in the container under /home/project/:
-
-  `docker run --rm`
-  ` -p 127.0.0.1:8080:8080 -p 127.0.0.1:8000:8000 -p 127.0.0.1:9000:9000`
-  ` -e "MODULES=github.com/dbenque/goAppengineToolkit/moduleData github.com/dbenque/goAppengineToolkit/moduleDefault github.com/dbenque/goAppengineToolkit/exampleApp"`
-  ` -v "$PWD/moduleHello:/home/project/moduleHello"`
-  ` dbenque/goappengine`
-
-  #### Modification of module's dependencies
-
-  Since module's dependencies are located in GOPATH, if you are modifying one of them, it means that you need to export that part of your local GOPATH to the GOPATH inside the container. The Docker image does that for you. For that you need to:
-  - expose your GOPATH to the container (in read only mode) :
-
-  `-v "$GOPATH:/localgopath:ro"`
-
-  - declare the packages of your GOPATH the you want to expose to the container via a var called LOCALGOPATH:
-
-  `-e "LOCALGOPATH=github.com/dbenque/goAppengineToolkit/dependencyHello"`
-
-  Complete command:
-
-  `docker run --rm`
-  `-p 127.0.0.1:8080:8080 -p 127.0.0.1:8000:8000 -p 127.0.0.1:9000:9000`
-  `-e "MODULES=github.com/dbenque/goAppengineToolkit/moduleData github.com/dbenque/goAppengineToolkit/moduleDefault github.com/dbenque/goAppengineToolkit/exampleApp github.com/dbenque/goAppengineToolkit/moduleHello"`
-  `-v "$GOPATH:/localgopath:ro" -e "LOCALGOPATH=github.com/dbenque/goAppengineToolkit/dependencyHello"` `dbenque/goappengine`
-
-  #### Modification of module's and its dependencies
-
-  You can combine all if you want to modify both your module and its dependencies:
-
-  `docker run --rm`
-  `-p 127.0.0.1:8080:8080 -p 127.0.0.1:8000:8000 -p 127.0.0.1:9000:9000`
-  `-e "MODULES=github.com/dbenque/goAppengineToolkit/moduleData github.com/dbenque/goAppengineToolkit/moduleDefault github.com/dbenque/goAppengineToolkit/exampleApp"`
-  `-v "$PWD/moduleHello:/home/project/moduleHello"`
-  `-v "$GOPATH:/localgopath:ro" -e "LOCALGOPATH=github.com/dbenque/goAppengineToolkit/dependencyHello"` `dbenque/goappengine`
-
-
+This command will mount you complete GOPATH. To be more selective place only the selected folders in the variable LOCALGOPATH.
 
   [1]: https://cloud.google.com/appengine/docs/go/#Go_Organizing_Go_apps
   [2]: https://golang.org/doc/code.html#remote

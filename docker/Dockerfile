@@ -4,28 +4,15 @@ FROM google/golang
 MAINTAINER dbenque
 
 RUN apt-get update
-RUN apt-get -y install procps
 
-# Install cmake
-RUN apt-get -y install build-essential cmake
-
-# Install Python 2.x
-RUN apt-get -y install python-dev
+# Install cmake Python 2.x
+RUN apt-get -y install procps build-essential cmake python-dev unzip
 
 # Env
 ENV HOME /home
 WORKDIR /home
 
-RUN curl -G https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-1.9.19.zip > go_appengine_sdk_linux_amd64.zip
-#update the repo source
-RUN apt-get update
-
-#install unzip
-RUN apt-get install -y unzip
-
-#unzip quietly
-RUN unzip -qq go_appengine_sdk_linux_amd64.zip
-RUN rm -rf go_appengine_sdk_linux_amd64.zip
+RUN curl -G https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-1.9.19.zip > go_appengine_sdk_linux_amd64.zip && unzip -qq go_appengine_sdk_linux_amd64.zip && rm -rf go_appengine_sdk_linux_amd64.zip
 
 ENV PATH $PATH:/home/go_appengine
 ENV GOROOT /home/go_appengine/goroot
