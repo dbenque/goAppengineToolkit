@@ -17,9 +17,14 @@ ENV HOME /home
 WORKDIR /home
 
 RUN curl -G https://storage.googleapis.com/appengine-sdks/featured/go_appengine_sdk_linux_amd64-1.9.19.zip > go_appengine_sdk_linux_amd64.zip
+#update the repo source
+RUN apt-get update
 
+#install unzip
 RUN apt-get install -y unzip
-RUN unzip go_appengine_sdk_linux_amd64.zip
+
+#unzip quietly
+RUN unzip -qq go_appengine_sdk_linux_amd64.zip
 RUN rm -rf go_appengine_sdk_linux_amd64.zip
 
 ENV PATH $PATH:/home/go_appengine
