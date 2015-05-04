@@ -46,6 +46,26 @@ func Retrieve(context appengine.Context, entity DatastoreEntity) error {
 		context.Infof("No entity %v", entity)
 		return err
 	}
+
+	storeInMemcache(context, key.String(), entity)
+
+	return nil
+}
+
+func storeInMemcache(context appengine.Context, key string, entity DatastoreEntity) error {
+	b, errJson := json.Marshal(entity)
+	if errJson == nil {
+		item := &memcache.Item{
+			Key:   key,
+			Value: b,
+		}
+
+		if err := memcache.Set(context, item); err != nil {
+			context.Infof("Error while storing in memcache %v", key)
+			return err
+		}
+	}
+
 	return nil
 }
 
@@ -59,17 +79,5 @@ func Store(context appengine.Context, entity DatastoreEntity) error {
 	}
 
 	//Update memcache
-	b, errJson := json.Marshal(entity)
-	if errJson == nil {
-		item := &memcache.Item{
-			Key:   key.String(),
-			Value: b,
-		}
-
-		if err := memcache.Set(context, item); err != nil {
-			context.Infof("Error while storing in memcache %v", key)
-		}
-	}
-
-	return nil
+	return storeInMemcache(context, key.String(), entity)
 }
