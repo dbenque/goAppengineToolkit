@@ -13,6 +13,13 @@ do
 
 done
 
+## get the application name
+appnameline=$(cat ./project/*/dispatch.yaml | grep "application:")
+
+## apply application name to all module
+sed -i "s/application:.*/$appnameline/" ./project/*/*.yaml
+
+
 ## prepare the command to launch all modules
 cmd="$cmd ./project/*/*.yaml"
 
